@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Tasks\TaskManager;
+use App\Livewire\Assets\AssetManager;
 
 Route::view('/', 'welcome');
 
@@ -16,5 +17,9 @@ Route::view('profile', 'profile')
 Route::get('/tasks', TaskManager::class)
     ->middleware(['auth'])
     ->name('tasks');
+
+Route::get('/assets', AssetManager::class)
+    ->middleware(['auth'])
+    ->name('assets');
 
 require __DIR__.'/auth.php';
