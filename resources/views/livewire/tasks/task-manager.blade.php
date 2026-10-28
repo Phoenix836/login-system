@@ -1,76 +1,123 @@
-<div>
-    <h1>Task Manager</h1>
+<div class="max-w-4xl mx-auto p-6">
 
-    <form wire:submit.prevent="save">
+    <a href="{{ route('dashboard') }}">
+        ← Back to Dashboard
+    </a>
 
-        <input
-            type="text"
-            wire:model="title"
-            placeholder="Task Title">
+    <br><br>
 
-        <textarea
-            wire:model="description"
-            placeholder="Description"></textarea>
+    <h1 class="text-3xl font-bold mb-6">
+        Task Manager
+    </h1>
 
-        <select wire:model="priority">
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
-        </select>
+    <div class="bg-white shadow rounded p-6 mb-6">
 
-        <input
-            type="date"
-            wire:model="due_date">
+        <form wire:submit.prevent="save">
 
-        <button type="submit">
-            Add Task
-        </button>
+            <div class="mb-4">
+                <input
+                    type="text"
+                    wire:model="title"
+                    placeholder="Task Title"
+                    class="w-full border rounded p-2">
+            </div>
 
-    </form>
+            <div class="mb-4">
+                <textarea
+                    wire:model="description"
+                    placeholder="Description"
+                    class="w-full border rounded p-2">
+                </textarea>
+            </div>
 
-    <hr>
+            <div class="mb-4">
+                <select
+                    wire:model="priority"
+                    class="w-full border rounded p-2">
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <input
+                    type="date"
+                    wire:model="due_date"
+                    class="w-full border rounded p-2">
+            </div>
+
+            <button
+                type="submit"
+                class="bg-blue-600 text-white px-4 py-2 rounded">
+                Add Task
+            </button>
+
+        </form>
+
+    </div>
 
     @foreach($tasks as $task)
 
-        <div style="margin-bottom:15px;">
+        <div class="bg-white shadow rounded p-4 mb-4">
 
-            <strong>{{ $task->title }}</strong>
+            <h3 class="text-xl font-semibold">
+                {{ $task->title }}
+            </h3>
 
-            <br>
+            <p class="mt-2">
+                {{ $task->description }}
+            </p>
 
-            {{ $task->description }}
+            <p class="mt-2">
+                <strong>Priority:</strong>
+                {{ $task->priority }}
+            </p>
 
-            <br>
+            <p>
+                <strong>Status:</strong>
+                {{ $task->status }}
+            </p>
 
-            Priority:
-            {{ $task->priority }}
+            <p>
+                <strong>Due Date:</strong>
+                {{ $task->due_date }}
+            </p>
 
-            <br>
+            <div class="mt-3">
 
-            Status:
-            {{ $task->status }}
-
-            <br><br>
-
-            @if($task->status === 'Pending')
+                @if($task->status === 'Pending')
 
                 <button
-                    wire:click="complete({{ $task->id }})">
+                    wire:click="edit({{ $task->id }})"
+                    class="bg-yellow-500 text-white px-3 py-1 rounded">
 
-                    Complete
+                    Edit
 
                 </button>
 
-            @endif
+                    <button
+                        wire:click="complete({{ $task->id }})"
+                        class="bg-green-600 text-white px-3 py-1 rounded">
 
-            <button
-                wire:click="delete({{ $task->id }})">
+                        Complete
 
-                Delete
+                    </button>
 
-            </button>
+                @endif
+
+                <button
+                    wire:click="delete({{ $task->id }})"
+                    class="bg-red-600 text-white px-3 py-1 rounded ml-2">
+
+                    Delete
+
+                </button>
+
+            </div>
 
         </div>
 
     @endforeach
+
 </div>

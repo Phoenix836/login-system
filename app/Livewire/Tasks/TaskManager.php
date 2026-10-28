@@ -11,26 +11,56 @@ class TaskManager extends Component
     public $description;
     public $priority = 'Medium';
     public $due_date;
+    public $editId = null;
+    public $editing = false;
 
-    public function save()
+public function edit($id)
+    {
+         $task = Task::findOrFail($id);
+
+            $this->editId = $task->id;
+            $this->title = $task->title;
+            $this->description = $task->description;
+            $this->priority = $task->priority;
+            $this->due_date = $task->due_date;
+
+         $this->editing = true;
+    }
+
+public function save()
     {
         $this->validate([
             'title' => 'required|min:3',
             'priority' => 'required',
         ]);
 
-        Task::create([
-            'title' => $this->title,
-            'description' => $this->description,
-            'priority' => $this->priority,
-            'due_date' => $this->due_date,
-            'user_id' => auth()->id(),
-        ]);
+        if ($this->editing) {
+
+            Task::findOrFail($this->editId)
+                ->update([
+                    'title' => $this->title,
+                    'description' => $this->description,
+                    'priority' => $this->priority,
+                    'due_date' => $this->due_date,
+                ]);
+
+        } else {
+
+            Task::create([
+                'title' => $this->title,
+                'description' => $this->description,
+                'priority' => $this->priority,
+                'due_date' => $this->due_date,
+                'user_id' => auth()->id(),
+            ]);
+        }
 
         $this->reset([
             'title',
             'description',
-            'due_date'
+            'due_date',
+            'editId',
+            'editing',
         ]);
     }
 
